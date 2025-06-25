@@ -5,4 +5,4 @@
   roles:
     - nginx
     - devops
-    # - firewall
+    - firewall

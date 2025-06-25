@@ -1,0 +1,34 @@
+---
+- name: Install UFW
+  become: true
+  apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: Allow SSH (22) port
+  become: true
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name: Allow puerto HTTP (80) port
+  become: true
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: Allow puerto HTTPS (443) port
+  become: true
+  ufw:
+    rule: allow
+    port: 443
+    proto: tcp
+
+- name: Allow UFW (be sure that the firewall is enabled)
+  become: true
+  ufw:
+    state: enabled
+    policy: allow
