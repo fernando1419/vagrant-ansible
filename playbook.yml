@@ -1,0 +1,8 @@
+---
+# - hosts: all  # use to refer to all groups in the inventory file.
+- hosts: WebServers # this is the group in the inventory file.
+  become: true
+  roles:
+    - nginx
+    # - devops
+    # - firewall
