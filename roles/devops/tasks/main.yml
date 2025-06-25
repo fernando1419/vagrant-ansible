@@ -1,0 +1,20 @@
+---
+- name: Ensure group 'sudo' exists
+  become: true
+  group:
+    name: sudo
+    state: present
+
+- name: Set hashed password for 'devops' user
+  set_fact:
+    devops_pass: "{{ 'devops' | password_hash('sha512') }}"
+
+- name: Add devops user
+  become: true
+  user:
+    name: devops
+    groups: sudo
+    append: true
+    shell: /bin/bash
+    create_home: true
+    password: "{{ devops_pass }}"
