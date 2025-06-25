@@ -1,0 +1,17 @@
+---
+- name: Install Nginx
+  apt: # because nodes use Ubuntu that is why we must use apt instead of dnf.
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Start and Enable Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Copy custom landing page
+  copy:
+    content: "<html><h1>Landing Page - Day 6 Ansible Challenge</h1></html>"
+    dest: /var/www/html/index.html
