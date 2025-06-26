@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     node1.vm.synced_folder ".", "/vagrant", disabled: true
 
     node1.vm.provider "virtualbox" do |vb|
-      vb.name = "day6-challenge-Node1_vagrant-vm"
+      vb.name = "node1_vagrant-vm"
       vb.memory = 512
       vb.cpus = 1
     end
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
     node2.vm.synced_folder ".", "/vagrant", disabled: true
 
     node2.vm.provider "virtualbox" do |vb|
-      vb.name = "day6-challenge-Node2_vagrant-vm"
+      vb.name = "node2_vagrant-vm"
       vb.memory = 512
       vb.cpus = 1
     end
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     ansible.vm.synced_folder ".", "/vagrant"
 
     ansible.vm.provider "virtualbox" do |vb|
-      vb.name = "day6-challenge-AnsibleControlNode_vagrant-vm"
+      vb.name = "AnsibleControlNode_vagrant-vm"
       vb.gui = false
       vb.memory = 1024
       vb.cpus = 1
