@@ -6,3 +6,6 @@
     - nginx
     - devops
     - firewall
+    - role: docker
+      vars:
+        docker_user: devops # Rewrites variable "docker_user" defined in docker/defaults/main.yml
