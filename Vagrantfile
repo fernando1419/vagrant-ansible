@@ -44,7 +44,11 @@ Vagrant.configure("2") do |config|
       vb.cpus = 1
     end
 
+    # Share current folder (local repository) in the VM.
+    ansible.vm.synced_folder ".", "/home/vagrant/ansible_project"
+
     ansible.vm.provision "shell", inline: <<-SHELL
+      echo "Installing Ansible..."
       sudo dnf install -y epel-release ansible
       mkdir -p /home/vagrant/.ssh
       cp /vagrant/.vagrant/machines/node1/virtualbox/private_key /home/vagrant/.ssh/node1_key
@@ -52,6 +56,10 @@ Vagrant.configure("2") do |config|
       chmod 600 /home/vagrant/.ssh/node1_key
       chmod 600 /home/vagrant/.ssh/node2_key
       chown vagrant:vagrant /home/vagrant/.ssh/node1_key /home/vagrant/.ssh/node2_key
+     
+      cd /home/vagrant/ansible_project
+      echo "Running Ansible Playbook..."
+      ansible-playbook -i /vagrant/inventories/vagrant/hosts.ini /vagrant/playbook.yml
     SHELL
     
   end
