@@ -1,0 +1,2 @@
+nodejs_RHEL_url: "{{ 'https://rpm.nodesource.com/setup_22.x' }}" # RHEL based Distributions
+nodejs_Ubuntu_url: "{{ 'https://deb.nodesource.com/setup_22.x' }}" # Ubuntu based Distributions

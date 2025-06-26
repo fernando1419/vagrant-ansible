@@ -1,0 +1,13 @@
+- name: Install Node.js 22.x
+  become: true
+  ansible.builtin.shell: |
+    # curl -fsSL {{ nodejs_RHEL_url }} | bash -
+    curl -fsSL {{ nodejs_Ubuntu_url }} | bash -
+  args:
+    executable: /bin/bash
+
+- name: Install Node.js y npm
+  become: true
+  ansible.builtin.package:
+    name: nodejs
+    state: present
