@@ -122,6 +122,22 @@ Eliminar todas las VMs:
 vagrant destroy -f
 ```
 
+## 🕯️ Corriendo el linter
+
+1- Verificar que esté bien instalado ansible-linter:
+
+```bash
+which ansible-lint
+# ~/.local/bin/ansible-lint
+```
+
+2- Se puede correr el linter de Ansible, haciendo:
+
+```bash
+cd /home/vagrant/ansible_project/
+ansible-lint playbook.yml
+```
+
 ## 💡 Notas
 
 Las tareas de Ansible están organizadas en roles reutilizables.

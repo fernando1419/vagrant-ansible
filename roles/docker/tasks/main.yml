@@ -1,6 +1,6 @@
 ---
 - name: Install dependencies
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - ca-certificates
@@ -10,18 +10,18 @@
     state: present
     update_cache: true
 
-- name: Add Docker GPG de Docker
+- name: Add Docker GPG key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
 - name: Add Docker Repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
     state: present
 
 - name: Install Docker Engine
-  apt:
+  ansible.builtin.apt:
     name:
       - docker-ce
       - docker-ce-cli
@@ -36,18 +36,19 @@
     enabled: true
 
 - name: Add vagrant and devops users to docker group
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     groups: docker
-    append: yes
+    append: true
   loop: "{{ docker_users }}" # use variables defined in docker/defaults/main.yml
   notify: Restart Docker
 
 - name: Check users of 'docker' group
-  shell: getent group | grep docker
+  ansible.builtin.shell: getent group | grep docker
   register: docker_group_output
   ignore_errors: true
+  changed_when: false
 
 - name: Show members of 'docker' group
-  debug:
+  ansible.builtin.debug:
     msg: "{{ docker_group_output.stdout | default('docker group does not exists') }}"

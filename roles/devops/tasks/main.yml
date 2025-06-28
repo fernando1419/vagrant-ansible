@@ -1,17 +1,17 @@
 ---
 - name: Ensure group 'sudo' exists
   become: true
-  group:
+  ansible.builtin.group:
     name: sudo
     state: present
 
 - name: Set hashed password for 'devops' user
-  set_fact:
+  ansible.builtin.set_fact:
     devops_pass: "{{ 'devops' | password_hash('sha512') }}"
 
 - name: Add devops user
   become: true
-  user:
+  ansible.builtin.user:
     name: devops
     groups: sudo
     append: true

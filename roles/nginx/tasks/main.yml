@@ -1,6 +1,6 @@
 ---
 - name: Install Nginx
-  apt: # because nodes use Ubuntu that is why we must use apt instead of dnf.
+  ansible.builtin.apt: # because nodes use Ubuntu that is why we must use apt instead of dnf.
     name: nginx
     state: present
     update_cache: true
@@ -12,8 +12,9 @@
     enabled: true
 
 - name: Copy custom landing page
-  copy:
+  ansible.builtin.copy:
     content: "<html><h1>Landing Page - Day 6 Ansible Challenge</h1></html>"
     dest: /var/www/html/index.html
+    mode: "0644"
   changed_when: true
   notify: Restart Nginx

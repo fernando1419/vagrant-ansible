@@ -1,4 +1,4 @@
-Vagrant.configure("2") do |config|
+Vagrant.configure("2") do |config|    
   # VM NODE1 - Web Server1
   config.vm.define "node1" do |node1|
     node1.vm.box = "ubuntu/jammy64"
@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
       vb.memory = 512
       vb.cpus = 1
     end
+    
   end
 
   # VM NODE2 - Web Server2
@@ -32,8 +33,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "ansible" do |ansible|
     ansible.vm.box = "generic/rocky9"
     ansible.vm.hostname = "ansible"
-    # config.vm.network "forwarded_port", guest: 443, host: 8443
-    # ansible.vm.network "forwarded_port", guest: 80, host: 8080
     ansible.vm.network "private_network", ip: "192.168.50.1"
     ansible.vm.synced_folder ".", "/vagrant"
 
@@ -47,18 +46,35 @@ Vagrant.configure("2") do |config|
     # Share current folder (local repository) in the VM.
     ansible.vm.synced_folder ".", "/home/vagrant/ansible_project"
 
-    ansible.vm.provision "shell", inline: <<-SHELL
-      echo "Installing Ansible..."
-      sudo dnf install -y epel-release ansible
+    # Install Ansible as root
+    ansible.vm.provision "install-ansible", type: "shell", privileged: true, inline: <<-SHELL
+      echo "👉 Installing Ansible..."
+      sudo dnf install -y epel-release
+      sudo dnf install -y ansible python3-pip      
       mkdir -p /home/vagrant/.ssh
       cp /vagrant/.vagrant/machines/node1/virtualbox/private_key /home/vagrant/.ssh/node1_key
       cp /vagrant/.vagrant/machines/node2/virtualbox/private_key /home/vagrant/.ssh/node2_key
       chmod 600 /home/vagrant/.ssh/node1_key
       chmod 600 /home/vagrant/.ssh/node2_key
       chown vagrant:vagrant /home/vagrant/.ssh/node1_key /home/vagrant/.ssh/node2_key
-     
+    SHELL
+
+    # Install ansible-lint as vagrant user
+    ansible.vm.provision "install-linter", type: "shell", privileged: false, inline: <<-SHELL
+      echo "👉 Installing ansible-linter using pip3 --user ..."
+      pip3 install --user ansible-lint
+
+      echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc
+      echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bash_profile
+      export PATH="$PATH:$HOME/.local/bin"
+      echo "👉 Checking ansible-lint installation..."
+      ansible-lint --version || echo "⚠️ ansible-lint not found."
+    SHELL
+
+    # Running ansible playbook
+    ansible.vm.provision "run-ansible-playbook", type: "shell", privileged: false, inline: <<-SHELL
       cd /home/vagrant/ansible_project
-      echo "Running Ansible Playbook..."
+      echo "👉 Running Ansible Playbook..."
       ansible-playbook -i /vagrant/inventories/vagrant/hosts.ini /vagrant/playbook.yml
     SHELL
     

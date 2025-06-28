@@ -1,8 +1,9 @@
 - name: Install Node.js 22.x
   become: true
+  changed_when: false
   ansible.builtin.shell: |
-    # curl -fsSL {{ nodejs_RHEL_url }} | bash -
-    curl -fsSL {{ nodejs_Ubuntu_url }} | bash -
+    # curl -fsSL {{ nodejs_rhel_url }} | bash -
+    set -o pipefail && curl -fsSL {{ nodejs_ubuntu_url }} | bash -
   args:
     executable: /bin/bash
 

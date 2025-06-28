@@ -1,6 +1,6 @@
 ---
-# - hosts: all  # use to refer to all groups in the inventory file.
-- hosts: WebServers # this is the group in the inventory file.
+- name: Set up WebServers nodes
+  hosts: WebServers # WebServers is the group in the inventory file. all refers to all groups in the inventory file.
   become: true
   roles:
     - nginx
